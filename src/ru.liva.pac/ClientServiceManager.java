@@ -4,32 +4,35 @@ package ru.liva.pac;
  * @author liva
  */
 
-import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ClientServiceManager {
 
-	private final ClientService clientService;
-	private static volatile ClientServiceManager clientServiceManager;
+	private static volatile ClientServiceManager instance;
 
+	private final ClientService service;
 
-	private ClientServiceManager(){
-		this.clientService = new ClientService();
-	}
-
-	public ClientService getClientService(){
-		return clientService;
+	private ClientServiceManager(Path path){
+		this.service = new ClientService(path);
 	}
 
 	public static ClientServiceManager getInstance() throws Exception{
-		if (clientServiceManager == null) {
+		if (instance == null) {
 			synchronized (ClientServiceManager.class) {
-				if (clientServiceManager == null) {
-//					File database = new File(System.getProperty("java.io.tmpdir"), "Database.db");
-//					database.createNewFile();
-					clientServiceManager = new ClientServiceManager();
+				if (instance == null) {
+
+					Path path = Paths.get(System.getProperty("java.io.tmpdir"), "database.db");
+					path.toFile().createNewFile();
+
+					instance = new ClientServiceManager(path);
 				}
 			}
 		}
-		return clientServiceManager;
+		return instance;
+	}
+
+	public ClientService getService(){
+		return service;
 	}
 }
