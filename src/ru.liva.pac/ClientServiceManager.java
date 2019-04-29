@@ -27,17 +27,12 @@ public class ClientServiceManager {
 
 					Path path = Paths.get(System.getProperty("java.io.tmpdir"), "database.db");
 
-//					TODO remove
-					if (path.toFile().exists()) {
-						path.toFile().delete();
-					}
-
 					if (path.toFile().createNewFile()) {
 						String url = String.format("jdbc:sqlite:%s", path.toString());
 
 						try (Connection connection = DriverManager.getConnection(url, null, null)) {
 							try (Statement statement = connection.createStatement()) {
-								statement.execute("CREATE TABLE dataTable (ID INTEGER PRIMARY KEY AUTOINCREMENT, login VARCHAR NOT NULL UNIQUE, password VARCHAR NOT NULL)");
+								statement.execute("CREATE TABLE dataTable (ID INTEGER PRIMARY KEY AUTOINCREMENT, login VARCHAR NOT NULL, password VARCHAR NOT NULL)");
 							}
 						}
 					}

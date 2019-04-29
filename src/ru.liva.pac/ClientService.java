@@ -42,7 +42,7 @@ public class ClientService {
 		}
 
 		try (Connection connection = DriverManager.getConnection(url, null, null)) {
-			try(PreparedStatement statement = connection.prepareStatement(sql)) {
+			try (PreparedStatement statement = connection.prepareStatement(sql)) {
 				statement.setString(1, client.getLogin());
 				statement.setString(2, client.getPassword());
 
